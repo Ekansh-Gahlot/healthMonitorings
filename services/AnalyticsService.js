@@ -1,5 +1,6 @@
 const HealthParameterService = require('./HealthParameterService');
 const healthParameterService = new HealthParameterService();
+const DateUtils = require('../utils/DateUtils');
 
 class AnalyticsService {
     static SEGMENTS = {
@@ -24,12 +25,12 @@ class AnalyticsService {
 
     static async getSummariesForPeriod(userId, timeframe) {
         const endDate = new Date();
-        const startDate = this.calculateStartDate(timeframe);
+        const startDate = DateUtils.calculateStartDate(timeframe);
 
         if (timeframe === '7d') {
-            return await this.getDailySummaries(userId, startDate, endDate);
+            return await healthParameterService.getAllSegmentSummaries(userId, startDate, endDate, 'daily');
         }
-        return await this.getWeeklySummaries(userId, startDate, endDate);
+        return await healthParameterService.getAllSegmentSummaries(userId, startDate, endDate, 'weekly');
     }
 
     static async calculateFitnessSegments(userId, timeframe) {

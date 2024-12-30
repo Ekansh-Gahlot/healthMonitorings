@@ -8,6 +8,7 @@ const AnalyticsService = require('./services/AnalyticsService');
 const ConfigurationService = require('./services/ConfigurationService');
 const DataRetentionService = require('./services/DataRetentionService');
 const NotificationService = require('./services/NotificationService');
+const DateUtils = require('./utils/DateUtils');
 
 module.exports = {
     HealthParameterService,
@@ -20,4 +21,5 @@ module.exports = {
     ConfigurationService,
     DataRetentionService,
     NotificationService,
+    DateUtils,
 };

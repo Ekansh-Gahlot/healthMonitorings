@@ -1,3 +1,5 @@
+const DateUtils = require('../utils/DateUtils');
+
 class DataRetentionService {
     static async processDailyRetention() {
         const cutoffDate = new Date();
@@ -41,20 +43,13 @@ class DataRetentionService {
 
     static groupLogsByWeek(logs) {
         return logs.reduce((groups, log) => {
-            const weekKey = this.getWeekKey(log.date);
+            const weekKey = DateUtils.getWeekKey(log.date);
             if (!groups[weekKey]) {
                 groups[weekKey] = [];
             }
             groups[weekKey].push(log);
             return groups;
         }, {});
-    }
-
-    static getWeekKey(date) {
-        const d = new Date(date);
-        d.setHours(0, 0, 0, 0);
-        d.setDate(d.getDate() - d.getDay());
-        return d.toISOString().split('T')[0];
     }
 
     static calculateAverage(logs) {

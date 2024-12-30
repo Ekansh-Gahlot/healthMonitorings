@@ -2,6 +2,7 @@ const Characteristic = require('../models/Characteristic');
 const CharacteristicLog = require('../models/CharacteristicLog');
 const DailySummary = require('../models/DailySummary');
 const WeeklySummary = require('../models/WeeklySummary');
+const DateUtils = require('../utils/DateUtils');
 
 class HealthParameterService {
     constructor() {
@@ -60,8 +61,8 @@ class HealthParameterService {
     }
 
     updateWeeklySummary(log) {
-        const weekStart = this.getWeekStart(log.referenceDay);
-        const weekEnd = this.getWeekEnd(log.referenceDay);
+        const weekStart = DateUtils.getWeekStart(log.referenceDay);
+        const weekEnd = DateUtils.getWeekEnd(log.referenceDay);
 
         const relevantDailySummaries = this.dailySummaries.filter(
             summary =>
@@ -105,38 +106,9 @@ class HealthParameterService {
         }
     }
 
-    getWeekStart(date) {
-        const d = new Date(date);
-        d.setHours(0, 0, 0, 0);
-        d.setDate(d.getDate() - d.getDay());
-        return d;
-    }
-
-    getWeekEnd(date) {
-        const d = new Date(date);
-        d.setHours(23, 59, 59, 999);
-        d.setDate(d.getDate() + (6 - d.getDay()));
-        return d;
-    }
-
-    getDailySummaries(userId, characteristicId, startDate, endDate) {
-        return this.dailySummaries.filter(
-            summary =>
-                summary.userId === userId &&
-                summary.characteristicId === characteristicId &&
-                summary.date >= startDate &&
-                summary.date <= endDate
-        );
-    }
-
-    getWeeklySummaries(userId, characteristicId, startDate, endDate) {
-        return this.weeklySummaries.filter(
-            summary =>
-                summary.userId === userId &&
-                summary.characteristicId === characteristicId &&
-                summary.weekStartDate >= startDate &&
-                summary.weekEndDate <= endDate
-        );
+    async getAllSegmentSummaries(userId, segment, startDate, endDate, summaryType = 'daily') {
+        const method = summaryType === 'daily' ? 'getDailySummaries' : 'getWeeklySummaries';
+        return this[method](userId, segment, startDate, endDate);
     }
 }
 
