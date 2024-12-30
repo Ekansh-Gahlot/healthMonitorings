@@ -11,6 +11,9 @@ class HealthParameterService {
         this.dailySummaries = [];
     }
 
+    /**
+     * @param {Characteristic} characteristic
+     */
     addCharacteristic(characteristic) {
         this.characteristics.set(characteristic.characteristicId, characteristic);
     }
@@ -19,6 +22,9 @@ class HealthParameterService {
         return this.characteristics.get(characteristicId);
     }
 
+    /**
+     * @param {CharacteristicLog} log
+     */
     addCharacteristicLog(log) {
         this.characteristicLogs.push(log);
         this.updateDailySummary(log);

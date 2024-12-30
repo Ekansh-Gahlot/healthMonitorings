@@ -1,3 +1,6 @@
+const HealthParameterService = require('./HealthParameterService');
+const healthParameterService = new HealthParameterService();
+
 class AnalyticsService {
     static SEGMENTS = {
         FITNESS: 'fitness',
@@ -141,6 +144,34 @@ class AnalyticsService {
             default:
                 throw new Error(`Invalid timeframe: ${timeframe}`);
         }
+    }
+
+    async getDailySummaries(userId, startDate, endDate) {
+        const allSummaries = [];
+        for (const segment of Object.values(AnalyticsService.SEGMENTS)) {
+            const summaries = healthParameterService.getDailySummaries(
+                userId,
+                segment,
+                startDate,
+                endDate
+            );
+            allSummaries.push(...summaries);
+        }
+        return allSummaries;
+    }
+
+    async getWeeklySummaries(userId, startDate, endDate) {
+        const allSummaries = [];
+        for (const segment of Object.values(AnalyticsService.SEGMENTS)) {
+            const summaries = healthParameterService.getWeeklySummaries(
+                userId,
+                segment,
+                startDate,
+                endDate
+            );
+            allSummaries.push(...summaries);
+        }
+        return allSummaries;
     }
 }
 
